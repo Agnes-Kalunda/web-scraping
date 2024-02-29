@@ -3,20 +3,26 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager  # Requires installation: pip install webdriver_manager
 from plyer import notification
 
 def get_machine_learning_news(request):
     location = "en-KE"
-    url = f"https://news.google.com/search?q=machine+learning&hl={location}"
+    url = f"https://news.google.com/search?q=president&hl={location}"
 
-    # Use ChromeDriverManager to automatically download the appropriate ChromeDriver version
-    driver = webdriver.Chrome(ChromeDriverManager().install())
-    
+    driver = None
+
     try:
+        # Use ChromeOptions to configure the ChromeDriver
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--headless')  
+        chrome_options.add_argument('--disable-gpu')  # to avoid GPU-related issues
+
+        # Initialize the ChromeDriver 
+        driver = webdriver.Chrome(options=chrome_options)
+
         driver.get(url)
 
-        # Wait for some time to allow JavaScript to execute (adjust the sleep time if needed)
+        
         import time
         time.sleep(5)
 
@@ -27,7 +33,8 @@ def get_machine_learning_news(request):
     except Exception as e:
         return HttpResponse(f"Failed to fetch news. Error: {str(e)}")
     finally:
-        driver.quit()
+        if driver:
+            driver.quit()
 
 def send_notification(title, message):
     notification.notify(
