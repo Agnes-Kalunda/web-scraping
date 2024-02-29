@@ -1,0 +1,22 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Learning News</title>
+</head>
+<body>
+    <h1>Machine Learning News</h1>
+
+    {% if news_titles %}
+        <ul>
+            {% for title in news_titles %}
+                <li>{{ title }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No machine learning news available at the moment.</p>
+    {% endif %}
+</body>
+</html>
